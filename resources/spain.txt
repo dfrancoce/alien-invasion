@@ -1,0 +1,8 @@
+Madrid north=Bilbao west=Lisboa south=Sevilla east=Valencia
+Bilbao south=Madrid east=Zaragoza west=Santander
+Zaragoza east=Barcelona west=Bilbao north=Huesca
+Santander east=Bilbao west=Oviedo
+Barcelona south=Valencia west=Zaragoza
+Huesca south=Zaragoza
+Oviedo east=Santander west=Coruna
+Valencia north=Barcelona west=Madrid
