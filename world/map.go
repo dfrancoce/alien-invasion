@@ -1,7 +1,7 @@
 package world
 
 import (
-	"fmt"
+	"log"
 	"main/aliens"
 	"math/rand"
 	"time"
@@ -19,9 +19,9 @@ type City struct {
 
 var numberOfAliensAliveAndNotTrapped int
 
-func GenerateMap(cities map[string]map[string]string) *CitiesMap {
-	fmt.Println("Generating map... ")
+const maxAlienSteps = 10000
 
+func GenerateMap(cities map[string]map[string]string) *CitiesMap {
 	cityMap := CitiesMap{Cities: map[string]*City{}}
 
 	for cityName, relCities := range cities {
@@ -36,10 +36,9 @@ func GenerateMap(cities map[string]map[string]string) *CitiesMap {
 }
 
 func (cityMap *CitiesMap) GenerateAliens(numberOfAliens int) {
-	fmt.Printf("Generating %d aliens\n", numberOfAliens)
-
 	numberOfAliensAliveAndNotTrapped = numberOfAliens
 	cities := cityMap.getMapCities()
+
 	for i := 0; i < numberOfAliens; i++ {
 		randomCityName := getRandomCityName(cities)
 		cityMap.Cities[randomCityName].Aliens = append(cityMap.Cities[randomCityName].Aliens, aliens.GenerateRandomAlien())
@@ -63,9 +62,9 @@ func (cityMap *CitiesMap) getMapCities() []string {
 func (cityMap *CitiesMap) StartSimulation() {
 	alienSteps := 1
 
-	for alienSteps <= 100000 && numberOfAliensAliveAndNotTrapped > 0 {
-		fmt.Printf("Iteration: %d\n", alienSteps)
-		fmt.Printf("numberOfAliensAliveAndNotTrapped: %d\n", numberOfAliensAliveAndNotTrapped)
+	for alienSteps <= maxAlienSteps && numberOfAliensAliveAndNotTrapped > 0 {
+		log.Printf("Iteration: %d\n", alienSteps)
+		log.Printf("numberOfAliensAliveAndNotTrapped: %d\n", numberOfAliensAliveAndNotTrapped)
 
 		for i := range cityMap.Cities {
 			currentCity := cityMap.Cities[i]
@@ -96,10 +95,13 @@ func (cityMap *CitiesMap) addCity(name string) *City {
 
 func (cityMap *CitiesMap) addRoad(fromCity *City, toCity *City, directionString string) {
 	if _, ok := cityMap.Cities[fromCity.Name]; !ok {
-		panic("No city named " + fromCity.Name)
+		log.Printf("No city named %s\n", fromCity.Name)
+		return
 	}
+
 	if _, ok := cityMap.Cities[toCity.Name]; !ok {
-		panic("No city named " + toCity.Name)
+		log.Printf("No city named %s\n", toCity.Name)
+		return
 	}
 
 	direction := convertToDirection(directionString)
@@ -115,7 +117,7 @@ func (cityMap *CitiesMap) addRoad(fromCity *City, toCity *City, directionString 
 
 func (cityMap *CitiesMap) destroyCity(cityName string) {
 	city := cityMap.Cities[cityName]
-	fmt.Printf("%s has been destroyed by alien %s and alien %s\n", cityName, city.Aliens[0].Name, city.Aliens[1].Name)
+	log.Printf("%s has been destroyed by alien %s and alien %s!\n", cityName, city.Aliens[0].Name, city.Aliens[1].Name)
 
 	killAliens(city)
 	removeRoadsFromAdjacentCities(city)
@@ -158,14 +160,14 @@ func (cityMap *CitiesMap) moveAlien(cityName string, alienSteps int) {
 
 	possibleDirections := getPossibleDirections(city)
 	if isAlienTrapped(possibleDirections, alien) {
-		fmt.Printf("The alien %s is trapped in %s!!!\n", alien.Name, cityName)
+		log.Printf("The alien %s is trapped in %s!!!\n", alien.Name, cityName)
 		return
 	}
 
 	// The alien moves to the new city
 	directionToMove := getDirectionToMove(possibleDirections)
 	destinationCity := moveAlienToNewCity(alien, directionToMove, city)
-	fmt.Printf("The alien %s moved from %s to %s\n", alien.Name, cityName, destinationCity.Name)
+	log.Printf("The alien %s moved from %s to %s\n", alien.Name, cityName, destinationCity.Name)
 
 	if len(destinationCity.Aliens) > 1 {
 		cityMap.destroyCity(destinationCity.Name)
@@ -185,6 +187,7 @@ func isAlienTrapped(possibleDirections []direction, alien aliens.Alien) bool {
 	if len(possibleDirections) == 0 {
 		alien.Trapped = true
 		numberOfAliensAliveAndNotTrapped -= 1
+
 		return true
 	}
 
