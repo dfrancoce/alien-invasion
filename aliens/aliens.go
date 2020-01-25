@@ -1,7 +1,6 @@
 package aliens
 
 import (
-	"fmt"
 	"github.com/Pallinder/go-randomdata"
 )
 
@@ -18,6 +17,5 @@ func GenerateRandomAlien() Alien {
 	randomAlien.Trapped = false
 	randomAlien.Steps = 0
 
-	fmt.Printf("A new alien named %s has been generated\n", randomAlien.Name)
 	return randomAlien
 }
