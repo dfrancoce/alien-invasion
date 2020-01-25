@@ -24,6 +24,21 @@ func convertToDirection(stringDirection string) direction {
 	}
 }
 
+func convertToString(direction direction) string {
+	switch direction {
+	case North:
+		return "north"
+	case South:
+		return "south"
+	case East:
+		return "east"
+	case West:
+		return "west"
+	default:
+		panic("The direction provided is not correct!!")
+	}
+}
+
 func inverseDirection(direction direction) direction {
 	switch direction {
 	case North:
