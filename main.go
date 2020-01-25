@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	utils "main/utils"
@@ -20,4 +21,11 @@ func main() {
 	citiesMap := world.GenerateMap(cities)
 	citiesMap.GenerateAliens(numberOfAliens)
 	citiesMap.StartSimulation()
+
+	printWorldLeft(citiesMap.GetWorldLeftAfterSimulation())
+}
+
+func printWorldLeft(worldLeft string) {
+	fmt.Print("\nThe world after the alien invasion\n\n")
+	fmt.Print(worldLeft)
 }

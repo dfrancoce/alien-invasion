@@ -63,9 +63,6 @@ func (cityMap *CitiesMap) StartSimulation() {
 	alienSteps := 1
 
 	for alienSteps <= maxAlienSteps && numberOfAliensAliveAndNotTrapped > 0 {
-		log.Printf("Iteration: %d\n", alienSteps)
-		log.Printf("numberOfAliensAliveAndNotTrapped: %d\n", numberOfAliensAliveAndNotTrapped)
-
 		for i := range cityMap.Cities {
 			currentCity := cityMap.Cities[i]
 			currentCityName := currentCity.Name
@@ -80,6 +77,20 @@ func (cityMap *CitiesMap) StartSimulation() {
 
 		alienSteps += 1
 	}
+}
+
+func (cityMap *CitiesMap) GetWorldLeftAfterSimulation() string {
+	world := ""
+
+	for _, city := range cityMap.Cities {
+		line := city.Name
+		for direction, relCity := range city.AdjCities {
+			line += " " + relCity.Name + "=" + convertToString(direction)
+		}
+		world += line + "\n"
+	}
+
+	return world
 }
 
 func (cityMap *CitiesMap) addCity(name string) *City {
@@ -159,8 +170,11 @@ func (cityMap *CitiesMap) moveAlien(cityName string, alienSteps int) {
 	}
 
 	possibleDirections := getPossibleDirections(city)
-	if isAlienTrapped(possibleDirections, alien) {
+	if len(possibleDirections) == 0 {
 		log.Printf("The alien %s is trapped in %s!!!\n", alien.Name, cityName)
+		city.Aliens[0].Trapped = true
+		numberOfAliensAliveAndNotTrapped -= 1
+
 		return
 	}
 
@@ -181,17 +195,6 @@ func moveAlienToNewCity(alien aliens.Alien, directionToMove direction, city *Cit
 	city.Aliens = nil
 
 	return destinationCity
-}
-
-func isAlienTrapped(possibleDirections []direction, alien aliens.Alien) bool {
-	if len(possibleDirections) == 0 {
-		alien.Trapped = true
-		numberOfAliensAliveAndNotTrapped -= 1
-
-		return true
-	}
-
-	return false
 }
 
 func getDirectionToMove(possibleDirections []direction) direction {

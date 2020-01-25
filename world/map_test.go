@@ -1,6 +1,8 @@
 package world
 
 import (
+	"strings"
+	"sync"
 	"testing"
 )
 
@@ -13,7 +15,12 @@ func TestWorld(t *testing.T) {
 	validateCitiesCreation(cityMap, t)
 	validateCitiesCommunications(cityMap, t)
 	validateAliensCreation(cityMap, t)
-	validateSimulation(cityMap, t)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go validateSimulation(cityMap, t, &wg)
+	wg.Wait()
+	validateWorldAfterSimulation(cityMap, t)
 }
 
 func validateCitiesCreation(cityMap *CitiesMap, t *testing.T) {
@@ -81,7 +88,8 @@ func validateAliensCreation(cityMap *CitiesMap, t *testing.T) {
 	}
 }
 
-func validateSimulation(cityMap *CitiesMap, t *testing.T) {
+func validateSimulation(cityMap *CitiesMap, t *testing.T, wg *sync.WaitGroup) {
+	defer wg.Done()
 	cityMap.StartSimulation()
 
 	// The simulation ends correctly when we reach on of the following states:
@@ -110,6 +118,15 @@ func validateSimulation(cityMap *CitiesMap, t *testing.T) {
 
 	if simulationOk == false {
 		t.Error("Expected the simulation to finish in a valid state")
+	}
+}
+
+func validateWorldAfterSimulation(cityMap *CitiesMap, t *testing.T) {
+	worldLeft := cityMap.GetWorldLeftAfterSimulation()
+	for _, city := range cityMap.getMapCities() {
+		if !strings.Contains(worldLeft, city) {
+			t.Errorf("Expected the String containing the world left to contain the city %s", city)
+		}
 	}
 }
 
