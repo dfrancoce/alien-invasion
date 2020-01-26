@@ -85,7 +85,7 @@ func (cityMap *CitiesMap) GetWorldLeftAfterSimulation() string {
 	for _, city := range cityMap.Cities {
 		line := city.Name
 		for direction, relCity := range city.AdjCities {
-			line += " " + relCity.Name + "=" + convertToString(direction)
+			line += " " + convertToString(direction) + "=" + relCity.Name
 		}
 		world += line + "\n"
 	}
