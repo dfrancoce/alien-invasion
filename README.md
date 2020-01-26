@@ -64,13 +64,21 @@ an example:
 ```
 The world after the alien invasion
 
-Lisboa
-Sevilla
-Huesca Zaragoza=south
-Zaragoza Huesca=north Bilbao=west Barcelona=east
-Valencia Barcelona=north
-Barcelona Valencia=south Zaragoza=west
-Oviedo Santander=east
-Santander Oviedo=west Bilbao=east
-Bilbao Zaragoza=east Santander=west
+Oslo east=Stockholm
+Amsterdam east=Hamburg
+Rome north=Zurich
+Dublin east=Manchester
+Luxembourg
+Cologne south=Zurich
+Berlin west=Hamburg
+Barcelona south=Madrid north=Paris
+Madrid north=Barcelona
+Paris south=Barcelona
+Zurich east=Munich south=Rome north=Cologne
+Munich north=Hamburg west=Zurich
+Kiev
+Manchester west=Dublin
+Hamburg west=Amsterdam east=Berlin south=Munich
+Helsinki
+Stockholm west=Oslo
 ```
