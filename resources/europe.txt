@@ -1,0 +1,27 @@
+Madrid north=Barcelona west=Lisbon
+Lisbon east=Madrid
+Barcelona north=Paris south=Madrid
+Paris north=London south=Barcelona
+London south=Paris north=Manchester east=Amsterdam
+Manchester west=Dublin
+Dublin east=Manchester
+Amsterdam south=Brussels east=Hamburg west=London
+Brussels north=Amsterdam east=Cologne south=Luxembourg
+Hamburg east=Berlin north=Copenhagen south=Munich
+Cologne west=Brussels south=Zurich
+Luxembourg north=Brussels
+Berlin west=Hamburg east=Warsaw south=Vienna
+Copenhagen south=Hamburg north=Oslo
+Munich north=Hamburg east=Vienna west=Zurich
+Zurich north=Cologne east=Munich south=Rome
+Warsaw west=Berlin south=Krakow east=Minsk
+Vienna north=Berlin west=Munich
+Oslo south=Copenhagen east=Stockholm
+Rome north=Zurich
+Krakow north=Warsaw
+Stockholm west=Oslo east=Tallinn
+Tallinn north=Helsinki south=Minsk
+Helsinki south=Tallinn
+Minsk north=Tallinn south=Kiev west=Warsaw east=Moscow
+Kiev north=Minsk
+Moscow west=Minsk
